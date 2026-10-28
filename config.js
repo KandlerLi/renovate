@@ -36,9 +36,6 @@ module.exports = {
   timezone: "Europe/Berlin",
   extends: ["config:recommended"],
 
-  // Report only, no branches or PRs. Remove to go live.
-  dryRun: "full",
-
   prHourlyLimit: 1,
   prConcurrentLimit: 3,
   minimumReleaseAge: "3 days",
@@ -92,6 +89,8 @@ module.exports = {
   packageRules: [
     // The regex manager above owns Terraform's image strings.
     { matchManagers: ["terraform"], matchDatasources: ["docker"], enabled: false },
+    // Built from terraform-provider-fritzbox and not in any registry; bumped by hand.
+    { matchPackageNames: ["kandlerli/fritzbox"], enabled: false },
     // One PR per repo for everything below a major; k3s always on its own, it upgrades the cluster.
     {
       matchUpdateTypes: ["minor", "patch", "digest", "pinDigest"],

@@ -37,15 +37,15 @@ strings in `.tf`/`.tfvars` and in workflow matrices, the Ansible
 `k3s_node_terraform_version`, and this repo's own `RENOVATE_VERSION`.
 
 Not covered on purpose: this account's own images (digest only, updated
-after each build), Nextcloud AIO (`:latest`, updates itself), and
+after each build) and its own `kandlerli/fritzbox` provider, Nextcloud AIO (`:latest`, updates itself), and
 version/checksum pairs such as `TERRAFORM_VERSION` in the CI
 Dockerfiles, which Renovate can't keep consistent.
 
-## Going live
+## Checking a run
 
-`dryRun: "full"` in `config.js` makes a run log what it would do and
-change nothing. Check a manual run's log (*Actions → Renovate → Run
-workflow*), then remove the line in a PR.
+*Actions → Renovate → Run workflow*, `log_level: debug` for details
+such as GitHub API errors. Adding `dryRun: "full"` to `config.js`
+makes runs log what they would do without touching any repo.
 
 ## Adding a repo
 
