@@ -5,6 +5,12 @@ on:
   schedule:
     - cron: "17 0,2 * * *"
   workflow_dispatch:
+    inputs:
+      log_level:
+        description: Renovate log level (debug shows e.g. GraphQL errors)
+        type: choice
+        options: [info, debug]
+        default: info
 
 concurrency:
   group: renovate
@@ -63,3 +69,5 @@ jobs:
           configurationFile: config.js
           token: ${{ steps.token.outputs.token }}
           renovate-version: ${{ env.RENOVATE_VERSION }}
+        env:
+          LOG_LEVEL: ${{ inputs.log_level || 'info' }}
