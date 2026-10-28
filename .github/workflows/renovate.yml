@@ -1,0 +1,65 @@
+name: Renovate
+
+on:
+  # Pairs with the time windows in config.js.
+  schedule:
+    - cron: "17 0,2 * * *"
+  workflow_dispatch:
+
+concurrency:
+  group: renovate
+
+permissions: {}
+
+env:
+  RENOVATE_VERSION: 44.190.2
+
+jobs:
+  renovate:
+    name: Renovate
+    runs-on: ubuntu-latest
+    # The apply role's OIDC trust requires it.
+    environment: production
+    timeout-minutes: 30
+    permissions:
+      contents: read
+      id-token: write
+
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        with:
+          persist-credentials: false
+
+      - uses: aws-actions/configure-aws-credentials@e6de054238d6b7531b4efff3b6587d9aade6a06c # v6.2.3
+        with:
+          aws-region: eu-central-1
+          role-to-assume: ${{ vars.AWS_ROLE_ARN }}
+
+      - name: Read App credentials
+        id: app
+        run: |
+          secret="$(aws secretsmanager get-secret-value --region eu-central-1 --secret-id renovate/github-app --query SecretString --output text)"
+          key="$(jq -r .app_private_key <<<"$secret")"
+          while IFS= read -r line; do
+            [ -n "$line" ] && echo "::add-mask::$line"
+          done <<<"$key"
+          echo "app_id=$(jq -r .app_id <<<"$secret")" >> "$GITHUB_OUTPUT"
+          {
+            echo "private_key<<PEM_END"
+            echo "$key"
+            echo "PEM_END"
+          } >> "$GITHUB_OUTPUT"
+
+      - name: Mint App token
+        id: token
+        uses: actions/create-github-app-token@64ab729a6294000f5aa4a4bc0b73d1f32bc45510 # v3.3.0
+        with:
+          app-id: ${{ steps.app.outputs.app_id }}
+          private-key: ${{ steps.app.outputs.private_key }}
+          owner: KandlerLi
+
+      - uses: renovatebot/github-action@2804199d260ad00c1fae0e9e842888369391c776 # v46.3.10
+        with:
+          configurationFile: config.js
+          token: ${{ steps.token.outputs.token }}
+          renovate-version: ${{ env.RENOVATE_VERSION }}
