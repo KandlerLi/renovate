@@ -49,7 +49,7 @@ jobs:
           while IFS= read -r line; do
             [ -n "$line" ] && echo "::add-mask::$line"
           done <<<"$key"
-          echo "app_id=$(jq -r .app_id <<<"$secret")" >> "$GITHUB_OUTPUT"
+          echo "client_id=$(jq -r .client_id <<<"$secret")" >> "$GITHUB_OUTPUT"
           {
             echo "private_key<<PEM_END"
             echo "$key"
@@ -60,7 +60,7 @@ jobs:
         id: token
         uses: actions/create-github-app-token@64ab729a6294000f5aa4a4bc0b73d1f32bc45510 # v3.3.0
         with:
-          app-id: ${{ steps.app.outputs.app_id }}
+          client-id: ${{ steps.app.outputs.client_id }}
           private-key: ${{ steps.app.outputs.private_key }}
           owner: KandlerLi
 
