@@ -20,6 +20,8 @@ that repo's CI, much of it on the self-hosted runners. So:
 
 - Each repo has its own weekly two-hour window; repos with self-hosted
   CI never share a night slot (`slots` in `config.js`).
+  The workflow starts hourly; outside a repo's window Renovate only
+  checks and opens nothing.
 - At most one new PR per repo and hour, three open per repo.
 - Minor, patch and digest updates come as one `non-major` PR per repo;
   majors and k3s come alone.
