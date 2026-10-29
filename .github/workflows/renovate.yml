@@ -1,9 +1,9 @@
 name: Renovate
 
 on:
-  # Pairs with the time windows in config.js.
+  # Hourly, since GitHub delays or drops scheduled runs; config.js' time windows decide when PRs happen.
   schedule:
-    - cron: "17 0,2 * * *"
+    - cron: "41 * * * *"
   workflow_dispatch:
     inputs:
       log_level:
