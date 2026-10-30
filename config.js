@@ -94,16 +94,22 @@ module.exports = {
     { matchManagers: ["terraform"], matchDatasources: ["docker"], enabled: false },
     // Built from terraform-provider-fritzbox and not in any registry; bumped by hand.
     { matchPackageNames: ["kandlerli/fritzbox"], enabled: false },
-    // One PR per repo for everything below a major; k3s always on its own, it upgrades the cluster.
+    // One PR per repo for everything below a major; k3s always on its own, it upgrades the cluster, and own images too.
     {
       matchUpdateTypes: ["minor", "patch", "digest", "pinDigest"],
-      matchDepNames: ["!k3s-io/k3s"],
+      matchDepNames: ["!k3s-io/k3s", "!ghcr.io/kandlerli/**"],
       groupName: "non-major",
     },
     ...slots.map(([name, weekday, hours]) => ({
       matchRepositories: [repo(name)],
       schedule: [`* ${hours} * * ${weekday}`],
     })),
+    // Own images: a fresh build should be pinned right away, without waiting.
+    {
+      matchDepNames: ["ghcr.io/kandlerli/**"],
+      schedule: ["at any time"],
+      minimumReleaseAge: null,
+    },
     ...slots.map(([name, , , day]) => ({
       matchRepositories: [repo(name)],
       matchUpdateTypes: ["lockFileMaintenance"],
