@@ -41,8 +41,14 @@ strings in `.tf`/`.tfvars` and in workflow matrices, the Ansible
 `*_image_name/_tag/_digest` triples, `k3s_node_version`,
 `k3s_node_terraform_version`, and this repo's own `RENOVATE_VERSION`.
 
-Not covered on purpose: this account's own images (digest only, updated
-after each build) and its own `kandlerli/fritzbox` provider, Nextcloud AIO (`:latest`, updates itself), and
+Own images (`ghcr.io/kandlerli/home-agent`, `sankey-export`) are pinned
+as `:main@sha256:…`; each build pushes the `main` tag, and Renovate
+proposes the new digest at its next run, outside any time window and
+without the three-day wait. They are private, so the workflow reads the
+GHCR pull token (`k3s-apps/ghcr-pull-token`) and passes it as a host
+rule for ghcr.io.
+
+Not covered on purpose: this account's own `kandlerli/fritzbox` provider, Nextcloud AIO (`:latest`, updates itself), and
 version/checksum pairs such as `TERRAFORM_VERSION` in the CI
 Dockerfiles, which Renovate can't keep consistent.
 

@@ -64,6 +64,14 @@ jobs:
           private-key: ${{ steps.app.outputs.private_key }}
           owner: KandlerLi
 
+      # Own images are private: config.js' ghcr.io/kandlerli rule needs registry access.
+      - name: Read GHCR pull token
+        id: ghcr
+        run: |
+          token="$(aws secretsmanager get-secret-value --region eu-central-1 --secret-id k3s-apps/ghcr-pull-token --query SecretString --output text | jq -r .token)"
+          echo "::add-mask::$token"
+          echo "host_rules=$(jq -cn --arg t "$token" '[{matchHost: "ghcr.io", username: "KandlerLi", password: $t}]')" >> "$GITHUB_OUTPUT"
+
       - uses: renovatebot/github-action@2804199d260ad00c1fae0e9e842888369391c776 # v46.3.10
         with:
           configurationFile: config.js
@@ -71,3 +79,4 @@ jobs:
           renovate-version: ${{ env.RENOVATE_VERSION }}
         env:
           LOG_LEVEL: ${{ inputs.log_level || 'info' }}
+          RENOVATE_HOST_RULES: ${{ steps.ghcr.outputs.host_rules }}
