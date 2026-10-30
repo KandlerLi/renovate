@@ -40,8 +40,9 @@ module.exports = {
   prConcurrentLimit: 3,
   minimumReleaseAge: "3 days",
   lockFileMaintenance: { enabled: true },
-  // Without an assignee GitHub notifies nobody about the App's PRs.
+  // Without these GitHub notifies nobody about the App's PRs; review requests also land in the /pulls inbox.
   assignees: ["KandlerLi"],
+  reviewers: ["KandlerLi"],
 
   customManagers: [
     {
