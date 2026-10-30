@@ -40,6 +40,8 @@ module.exports = {
   prConcurrentLimit: 3,
   minimumReleaseAge: "3 days",
   lockFileMaintenance: { enabled: true },
+  // Without an assignee GitHub notifies nobody about the App's PRs.
+  assignees: ["KandlerLi"],
 
   customManagers: [
     {
