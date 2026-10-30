@@ -25,6 +25,9 @@ const slots = [
 
 const repo = (name) => `KandlerLi/${name}`;
 
+// Rolled out by hand after merging; their required rollout-ack check (gha-common) wants this ticked.
+const rolledOutByHand = ["home-infra", "k3s-bootstrap", "terraform-state", "repo-infra", "fritzbox"];
+
 module.exports = {
   platform: "github",
   repositories: slots.map(([name]) => repo(name)),
@@ -115,5 +118,11 @@ module.exports = {
       matchUpdateTypes: ["lockFileMaintenance"],
       schedule: [`* 1-4 ${day} * *`],
     })),
+    {
+      matchRepositories: rolledOutByHand.map(repo),
+      prBodyNotes: [
+        "- [ ] I roll this out myself after merging, or nothing here needs a rollout. <!-- rollout-ack -->",
+      ],
+    },
   ],
 };

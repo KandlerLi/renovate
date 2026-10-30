@@ -52,6 +52,12 @@ Not covered on purpose: this account's own `kandlerli/fritzbox` provider, Nextcl
 version/checksum pairs such as `TERRAFORM_VERSION` in the CI
 Dockerfiles, which Renovate can't keep consistent.
 
+## Repos rolled out by hand
+
+PRs for `rolledOutByHand` in `config.js` get the rollout checkbox that
+those repos' required `rollout-ack` check (gha-common) waits for. Tick it
+only when you will roll the update out after merging.
+
 ## Checking a run
 
 *Actions → Renovate → Run workflow*, `log_level: debug` for details
