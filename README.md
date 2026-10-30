@@ -3,8 +3,9 @@
 Self-hosted [Renovate](https://docs.renovatebot.com/) for every
 KandlerLi repository (tracker #42). It opens update PRs; merging stays
 manual, through each repo's own CI and review.
-Every PR is assigned to KandlerLi, which is what triggers GitHub's
-notification.
+Every PR is assigned to KandlerLi and requests a review from
+KandlerLi, which triggers GitHub's notification and puts it in the
+/pulls inbox.
 
 - `config.js` is the only config: target repos, their time windows,
   limits, grouping and the custom managers. Target repos need no
