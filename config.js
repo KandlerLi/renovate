@@ -1,26 +1,26 @@
 // Global Renovate config for every KandlerLi repo: see README.
 
-// [repo, weekday (0 = Sunday), hours, lockfile day of month]. The workflow runs at 00:17 and 02:17 UTC,
-// which lands in "1-2" and "3-4" Berlin time in both summer and winter. Self-hosted-CI repos get a night
-// to themselves so their PR checks never pile up on the homeserver (tracker #12).
+// [repo, weekday (0 = Sunday), lockfile day of month]. One window, 00:00-05:59 Berlin: GitHub starts the
+// hourly workflow only every ~4-6 h, so narrower windows were missed (tracker #44). At most two
+// self-hosted-CI repos share a night (tracker #12).
 const slots = [
-  ["k3s-apps", 1, "1-2", 1],
-  ["home-infra", 2, "1-2", 2],
-  ["dyndns", 3, "1-2", 3],
-  ["website", 3, "3-4", 4],
-  ["aws-budget", 4, "1-2", 5],
-  ["homeserver-health-check", 4, "3-4", 6],
-  ["ses-relay", 5, "1-2", 7],
-  ["secrets-manager", 5, "3-4", 8],
+  ["k3s-apps", 1, 1],
+  ["home-infra", 2, 2],
+  ["dyndns", 3, 3],
+  ["website", 3, 4],
+  ["aws-budget", 4, 5],
+  ["homeserver-health-check", 4, 6],
+  ["ses-relay", 5, 7],
+  ["secrets-manager", 5, 8],
   // GitHub-hosted CI only.
-  ["repo-infra", 6, "1-2", 9],
-  ["terraform-state", 6, "1-2", 10],
-  ["k3s-bootstrap", 6, "3-4", 11],
-  ["gha-common", 6, "3-4", 12],
-  ["terraform-provider-fritzbox", 0, "1-2", 13],
-  ["fritzbox", 0, "1-2", 14],
-  ["home-infra-docs", 0, "3-4", 15],
-  ["renovate", 0, "3-4", 16],
+  ["repo-infra", 6, 9],
+  ["terraform-state", 6, 10],
+  ["k3s-bootstrap", 6, 11],
+  ["gha-common", 6, 12],
+  ["terraform-provider-fritzbox", 0, 13],
+  ["fritzbox", 0, 14],
+  ["home-infra-docs", 0, 15],
+  ["renovate", 0, 16],
 ];
 
 const repo = (name) => `KandlerLi/${name}`;
@@ -103,9 +103,9 @@ module.exports = {
       matchDepNames: ["!k3s-io/k3s", "!ghcr.io/kandlerli/**"],
       groupName: "non-major",
     },
-    ...slots.map(([name, weekday, hours]) => ({
+    ...slots.map(([name, weekday]) => ({
       matchRepositories: [repo(name)],
-      schedule: [`* ${hours} * * ${weekday}`],
+      schedule: [`* 0-5 * * ${weekday}`],
     })),
     // Own images: a fresh build should be pinned right away, without waiting.
     {
@@ -113,10 +113,10 @@ module.exports = {
       schedule: ["at any time"],
       minimumReleaseAge: null,
     },
-    ...slots.map(([name, , , day]) => ({
+    ...slots.map(([name, , day]) => ({
       matchRepositories: [repo(name)],
       matchUpdateTypes: ["lockFileMaintenance"],
-      schedule: [`* 1-4 ${day} * *`],
+      schedule: [`* 0-5 ${day} * *`],
     })),
     {
       matchRepositories: rolledOutByHand.map(repo),
