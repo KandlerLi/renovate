@@ -21,10 +21,11 @@ KandlerLi, which triggers GitHub's notification and puts it in the
 Renovate itself never touches the homeserver, but each PR it opens runs
 that repo's CI, much of it on the self-hosted runners. So:
 
-- Each repo has its own weekly two-hour window; repos with self-hosted
-  CI never share a night slot (`slots` in `config.js`).
-  The workflow starts hourly; outside a repo's window Renovate only
-  checks and opens nothing.
+- Each repo has its weekday; the window is 00:00-05:59 Berlin time, and
+  at most two repos with self-hosted CI share a night (`slots` in
+  `config.js`). The workflow is set to start hourly, but GitHub starts it
+  only every ~4-6 hours, hence the wide window. Outside a repo's window
+  Renovate only checks and opens nothing.
 - At most one new PR per repo and hour, three open per repo.
 - Minor, patch and digest updates come as one `non-major` PR per repo;
   majors and k3s come alone.
@@ -66,6 +67,6 @@ makes runs log what they would do without touching any repo.
 
 ## Adding a repo
 
-Add a `slots` entry with a free window, and add the repo to the App's
+Add a `slots` entry on a quiet weekday, and add the repo to the App's
 installation (*Settings → GitHub Apps → kandlerli-renovate →
 Configure*).
