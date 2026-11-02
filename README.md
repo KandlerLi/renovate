@@ -60,7 +60,9 @@ default `minimumReleaseAgeBehaviour=timestamp-required` treats a release
 without a timestamp as never old enough, and only Docker Hub supplies
 timestamps, digest updates and GHCR or Quay tags never have one. So those
 updates were held indefinitely and silently: the 2026-11-02 security scan
-found CRITICALs in images months behind (tracker #54). Docker images now
+found CRITICALs in images months behind (tracker #54). Some Docker Hub
+images (Grafana, nginx-unprivileged) were held the same way, though the
+Hub API has timestamps for them; why is unverified. Docker images now
 use `timestamp-optional`: they keep the age check where a timestamp exists
 and skip it where none does. npm, PyPI, Actions and Terraform providers
 stay on the strict default.
