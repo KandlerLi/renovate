@@ -53,6 +53,20 @@ Not covered on purpose: this account's own `kandlerli/fritzbox` provider, Nextcl
 version/checksum pairs such as `TERRAFORM_VERSION` in the CI
 Dockerfiles, which Renovate can't keep consistent.
 
+## Release age and container images
+
+`minimumReleaseAge` waits 3 days before proposing a release. Renovate's
+default `minimumReleaseAgeBehaviour=timestamp-required` treats a release
+without a timestamp as never old enough, and only Docker Hub supplies
+timestamps, digest updates and GHCR or Quay tags never have one. So those
+updates were held indefinitely and silently: the 2026-11-02 security scan
+found CRITICALs in images months behind (tracker #54). Some Docker Hub
+images (Grafana, nginx-unprivileged) were held the same way, though the
+Hub API has timestamps for them; why is unverified. Docker images now
+use `timestamp-optional`: they keep the age check where a timestamp exists
+and skip it where none does. npm, PyPI, Actions and Terraform providers
+stay on the strict default.
+
 ## Repos rolled out by hand
 
 PRs for `rolledOutByHand` in `config.js` get the rollout checkbox that

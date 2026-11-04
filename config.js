@@ -93,6 +93,8 @@ module.exports = {
   ],
 
   packageRules: [
+    // GHCR, Quay and digests have no release timestamps, so timestamp-required holds them forever: see README.
+    { matchDatasources: ["docker"], minimumReleaseAgeBehaviour: "timestamp-optional" },
     // The regex manager above owns Terraform's image strings.
     { matchManagers: ["terraform"], matchDatasources: ["docker"], enabled: false },
     // Built from terraform-provider-fritzbox and not in any registry; bumped by hand.
