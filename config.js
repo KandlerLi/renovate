@@ -49,9 +49,9 @@ module.exports = {
 
   customManagers: [
     {
-      // Digest-pinned image refs in Terraform and in the security-scan matrices.
+      // Digest-pinned image refs in Terraform, k3s-apps' Argo CD manifests and the security-scan matrices.
       customType: "regex",
-      managerFilePatterns: ["/\\.tf$/", "/\\.tfvars$/", "/^\\.github/workflows/[^/]+\\.ya?ml$/"],
+      managerFilePatterns: ["/\\.tf$/", "/\\.tfvars$/", "/^argocd/.+\\.ya?ml$/", "/^\\.github/workflows/[^/]+\\.ya?ml$/"],
       matchStrings: [
         "(?<depName>[a-z0-9][a-z0-9./_-]*):(?<currentValue>[A-Za-z0-9][A-Za-z0-9._-]*)@(?<currentDigest>sha256:[a-f0-9]{64})",
       ],
