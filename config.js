@@ -5,6 +5,7 @@
 // self-hosted-CI repos share a night (tracker #12).
 const slots = [
   ["k3s-apps", 1, 1],
+  ["stalwart-config", 1, 17],
   ["home-infra", 2, 2],
   ["dyndns", 3, 3],
   ["website", 3, 4],
