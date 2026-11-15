@@ -34,7 +34,7 @@ module.exports = {
   repositories: slots.map(([name]) => repo(name)),
   onboarding: false,
   requireConfig: "optional",
-  dependencyDashboard: false,
+  dependencyDashboard: { enabled: false },
   // Commits through the API, so GitHub signs them.
   platformCommit: "enabled",
   timezone: "Europe/Berlin",
