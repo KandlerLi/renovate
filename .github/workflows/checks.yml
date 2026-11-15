@@ -9,7 +9,7 @@ permissions:
   contents: read
 
 env:
-  RENOVATE_VERSION: 44.219.0
+  RENOVATE_VERSION: 44.235.3
 
 jobs:
   validate:
