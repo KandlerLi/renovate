@@ -42,10 +42,10 @@ strings in `.tf`/`.tfvars` and in workflow matrices, the Ansible
 `*_image_name/_tag/_digest` triples, `k3s_node_version`,
 `k3s_node_terraform_version`, and this repo's own `RENOVATE_VERSION`.
 
-Own images (`ghcr.io/kandlerli/home-agent`, `sankey-export`) are pinned
-as `:main@sha256:…`; each build pushes the `main` tag, and Renovate
+The own image (`ghcr.io/kandlerli/sankey-export`) is pinned as
+`:main@sha256:…`; each build pushes the `main` tag, and Renovate
 proposes the new digest at its next run, outside any time window and
-without the three-day wait. They are private, so the workflow reads the
+without the three-day wait. It is private, so the workflow reads the
 GHCR pull token (`k3s-apps/ghcr-pull-token`) and passes it as a host
 rule for ghcr.io.
 
