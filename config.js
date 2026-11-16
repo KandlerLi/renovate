@@ -40,7 +40,8 @@ module.exports = {
   timezone: "Europe/Berlin",
   extends: ["config:recommended"],
 
-  prHourlyLimit: 1,
+  // Off: one run per weekly window allowed only one PR per repo and week (tracker #54); prConcurrentLimit still caps.
+  prHourlyLimit: 0,
   prConcurrentLimit: 3,
   minimumReleaseAge: "3 days",
   lockFileMaintenance: { enabled: true },
