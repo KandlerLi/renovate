@@ -128,5 +128,13 @@ module.exports = {
         "- [ ] I roll this out myself after merging, or nothing here needs a rollout. <!-- rollout-ack -->",
       ],
     },
+    // The new major's entrypoint refuses an old data directory: k3s-apps #238, reverted in #240.
+    {
+      matchDepNames: ["postgres"],
+      matchUpdateTypes: ["major"],
+      prBodyNotes: [
+        "> [!WARNING]\n> Major PostgreSQL update: every persistent database (not `emptyDir`) needs `pg_upgrade` or a dump/restore before merging, otherwise the postgres container crash-loops on the old data directory.",
+      ],
+    },
   ],
 };
